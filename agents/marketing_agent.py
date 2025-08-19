@@ -19,39 +19,6 @@ class MarketingAgent(BaseAgent):
     def __init__(self, model_type: str = "openai"):
         super().__init__(model_type)
         self.vector_service = VectorService(collection_name=self.settings.qdrant_marketing_collection)
-        self.retrieval_qa = None
-        self._setup_retrieval_qa()
-    
-    def _setup_retrieval_qa(self):
-        """Setup RetrievalQA chain untuk RAG."""
-        print("Setting up RetrievalQA for Marketing Agent...")
-        print(f"Using model type: {self.model_type}")
-        try:
-            if self.model_type == "openai":
-                llm = ChatOpenAI(
-                    api_key=self.settings.openai_api_key,
-                    model=self.settings.openai_model,
-                    temperature=0.3  # Lower temperature untuk konsistensi
-                )
-            # elif self.model_type == "gemini":
-            #     genai.configure(api_key=self.settings.gemini_api_key)
-            #     llm = genai.GenerativeModel(self.settings.gemini_model)
-
-                # Get retriever dari vector service
-                retriever = self.vector_service.get_retriever(search_kwargs={"k": 3})
-                
-                if retriever:
-                    self.retrieval_qa = RetrievalQA.from_chain_type(
-                        llm=llm,
-                        chain_type="stuff",
-                        retriever=retriever,
-                        return_source_documents=True,
-                        chain_type_kwargs={
-                            "prompt": self._get_rag_prompt_template()
-                        }
-                    )
-        except Exception as e:
-            print(f"Error setting up RetrievalQA: {str(e)}")
     
     def get_system_prompt_example(self) -> str:
         """System prompt untuk Marketing Agent."""
@@ -135,18 +102,7 @@ class MarketingAgent(BaseAgent):
         Returns:
             Response dari Marketing Agent
         """
-        # Check apakah pertanyaan berkaitan dengan marketing
-        # if not self._is_marketing_related(query):
-        #     return "Maaf, saya hanya dapat membantu dengan pertanyaan seputar analisis marketing dan pemasaran."
-        
         try:
-            # # Jika ada RetrievalQA dan model OpenAI, gunakan RAG
-            # if self.retrieval_qa and self.model_type == "openai":
-            #     result = self.retrieval_qa({"query": query})
-            #     return result["result"]
-            
-            # # Fallback ke regular generation dengan vector search
-            # else:
                 # Search knowledge base
                 relevant_docs = self.vector_service.similarity_search(query, k=3)
                 
@@ -190,8 +146,6 @@ class MarketingAgent(BaseAgent):
         """
         try:
             self.vector_service.add_documents(documents, metadata_list)
-            # Re-setup RetrievalQA setelah menambah dokumen
-            self._setup_retrieval_qa()
             return True
         except Exception as e:
             print(f"Error adding marketing documents: {str(e)}")

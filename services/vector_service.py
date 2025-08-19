@@ -37,7 +37,7 @@ class VectorService:
     def _get_qdrant_client(self) -> QdrantClient:
         """Get Qdrant client."""
         return QdrantClient(
-            host=settings.qdrant_host,
+            url=settings.qdrant_host,
             port=settings.qdrant_port,
             api_key=settings.qdrant_api_key,
             https=settings.qdrant_is_https
