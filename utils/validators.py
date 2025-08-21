@@ -14,7 +14,7 @@ def validate_model_type(model_type: str) -> bool:
     Returns:
         True if valid, False otherwise
     """
-    valid_models = ["openai", "gemini"]
+    valid_models = ["telkom-ai", "gemini"]
     return model_type.lower() in valid_models
 
 

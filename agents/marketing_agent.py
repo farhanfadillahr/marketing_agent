@@ -16,7 +16,7 @@ class MarketingAgent(BaseAgent):
     Fokus khusus pada analisis marketing dengan knowledge base.
     """
     
-    def __init__(self, model_type: str = "openai"):
+    def __init__(self, model_type: str = "telkom-ai"):
         super().__init__(model_type)
         self.vector_service = VectorService(collection_name=self.settings.qdrant_marketing_collection)
     
@@ -111,7 +111,7 @@ class MarketingAgent(BaseAgent):
                 else:
                     context = "Tidak ada informasi relevan dalam knowledge base."
                 
-                if self.model_type == "openai":
+                if self.model_type == "telkom-ai":
                     client = self._get_model_client()
                     
                     messages = [
@@ -120,8 +120,17 @@ class MarketingAgent(BaseAgent):
                         HumanMessage(content=query)
                     ]
                     
-                    response = client.invoke(messages)
-                    return response.content
+                    # Konversi ke format JSON
+                    json_messages = [
+                        {"role": "system" if isinstance(m, SystemMessage) else "user", "content": m.content}
+                        for m in messages
+                    ]
+                    
+                    completion = client.chat.completions.create(
+                        model=self.settings.telkom_ai_model,
+                        messages=json_messages
+                    )
+                    return completion.choices[0].message.content
                     
                 elif self.model_type == "gemini":
                     client = self._get_model_client()

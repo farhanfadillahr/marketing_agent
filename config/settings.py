@@ -17,6 +17,10 @@ class Settings(BaseSettings):
     gemini_api_key: Optional[str] = None
     gemini_model: str = "gemini-1.5-flash"
 
+    telkom_ai_base_url: str = "https://telkom-ai-dag-api.apilogy.id/Telkom-LLM/0.0.4/llm"
+    telkom_ai_api_key: Optional[str] = None
+    telkom_ai_model: str = "telkom-ai"
+
     # Qdrant Vector Database
     qdrant_host: str = "localhost"
     qdrant_port: int = 6333

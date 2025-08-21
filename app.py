@@ -29,7 +29,7 @@ def initialize_session_state():
     if 'current_agent' not in st.session_state:
         st.session_state['current_agent'] = 'general'
     if 'current_model' not in st.session_state:
-        st.session_state['current_model'] = 'openai'
+        st.session_state['current_model'] = 'telkom-ai'
     if 'marketing_kb_loaded' not in st.session_state:
         st.session_state['marketing_kb_loaded'] = False
 
@@ -54,7 +54,7 @@ with st.sidebar:
     # Model Selection
     st.subheader("Model LLM")
     model_options = {
-        "openai": "OpenAI GPT-4O Mini",
+        "telkom-ai": "Telkom AI (v0.0.4)",
         "gemini": "Google Gemini 1.5 Flash"
     }
     
@@ -62,7 +62,7 @@ with st.sidebar:
         "Pilih Model:",
         options=list(model_options.keys()),
         format_func=lambda x: model_options[x],
-        index=0 if st.session_state['current_model'] == 'openai' else 1,
+        index=0 if st.session_state['current_model'] == 'telkom-ai' else 1,
         key="model_selector"
     )
     
@@ -73,8 +73,8 @@ with st.sidebar:
     # Agent Selection  
     st.subheader("Tipe Agent")
     agent_options = {
-        "general": "🗣️ General Agent",
-        "marketing": "📊 Marketing Agent"
+        "general": "General Agent",
+        "marketing": "Market Analyst Agent"
     }
     
     selected_agent = st.selectbox(
@@ -139,7 +139,7 @@ with st.sidebar:
         if st.session_state['marketing_kb_loaded']:
             st.info("📋 Knowledge base marketing siap digunakan")
         else:
-            st.warning("⚠️ Upload dokumen marketing untuk hasil analisis yang lebih akurat")
+            st.warning("Upload dokumen marketing untuk hasil analisis yang lebih akurat")
 
 # Agent Info
 col1, col2 = st.columns([2, 1])
@@ -148,7 +148,7 @@ with col1:
     # Agent description
     if st.session_state['current_agent'] == 'general':
         st.info("""
-        **🗣️ General Agent** - Assistant AI seperti ChatGPT yang dapat membantu dengan:
+        **General Agent** - Assistant AI seperti ChatGPT yang dapat membantu dengan:
         - Pertanyaan umum tentang teknologi, sains, bisnis
         - Menulis dan editing
         - Analisis dan perhitungan
@@ -157,7 +157,7 @@ with col1:
         """)
     else:
         st.info("""
-        **📊 Marketing Agent** - Specialist analisis marketing berbasis RAG yang fokus pada:
+        **Marketing Analyst Agent** - Specialist analisis marketing berbasis RAG yang fokus pada:
         - Analisis tren pasar dan industri
         - Analisis kompetitor dan positioning
         - Segmentasi dan targeting pelanggan
@@ -216,7 +216,7 @@ st.divider()
 st.markdown("""
 <div style='text-align: center; color: #666; margin-top: 50px;'>
     <small>
-        Powered by OpenAI GPT-4O Mini & Google Gemini 1.5 Flash | 
+        Powered by Telkom AI (v0.0.4) & Google Gemini 1.5 Flash | 
         Vector Store: Qdrant | 
         Framework: LangChain
     </small>

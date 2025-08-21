@@ -12,7 +12,7 @@ class GeneralAgent(BaseAgent):
     Fleksibel, ramah, dan bisa menjawab berbagai topik.
     """
     
-    def __init__(self, model_type: str = "openai"):
+    def __init__(self, model_type: str = "telkom-ai"):
         super().__init__(model_type)
     
     def get_system_prompt(self) -> str:
@@ -43,7 +43,7 @@ class GeneralAgent(BaseAgent):
             Response dari General Agent
         """
         try:
-            if self.model_type == "openai":
+            if self.model_type == "telkom-ai":
                 client = self._get_model_client()
                 
                 messages = [
@@ -54,10 +54,19 @@ class GeneralAgent(BaseAgent):
                     messages.append(SystemMessage(content=f"Konteks tambahan: {context}"))
                 
                 messages.append(HumanMessage(content=query))
-                
-                response = client.invoke(messages)
-                return response.content
-                
+
+                # Konversi ke format JSON
+                json_messages = [
+                    {"role": "system" if isinstance(m, SystemMessage) else "user", "content": m.content}
+                    for m in messages
+                ]
+                completion = client.chat.completions.create(
+                    model=self.settings.telkom_ai_model,
+                    messages=json_messages
+                )
+
+                return completion.choices[0].message.content
+
             elif self.model_type == "gemini":
                 client = self._get_model_client()
                 

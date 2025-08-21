@@ -8,13 +8,13 @@ from config import settings
 
 class BaseAgent(ABC):
     """Base class untuk semua agent."""
-    
-    def __init__(self, model_type: str = "openai"):
+
+    def __init__(self, model_type: str = "telkom-ai"):
         """
         Initialize base agent.
         
         Args:
-            model_type: Tipe model yang digunakan ('openai' atau 'gemini')
+            model_type: Tipe model yang digunakan ('telkom-ai' atau 'gemini')
         """
         self.model_type = model_type
         self.settings = settings
@@ -46,13 +46,12 @@ class BaseAgent(ABC):
     
     def _get_model_client(self):
         """Get client untuk model yang dipilih."""
-        if self.model_type == "openai":
-            from langchain_openai import ChatOpenAI
-            return ChatOpenAI(
-                api_key=self.settings.openai_api_key,
-                model=self.settings.openai_model,
-                temperature=0.7
-            )
+        if self.model_type == "telkom-ai":
+            from openai import OpenAI
+            return OpenAI(
+                api_key=self.settings.telkom_ai_api_key,
+                base_url=self.settings.telkom_ai_base_url,
+                default_headers={"x-api-key": self.settings.telkom_ai_api_key})
         elif self.model_type == "gemini":
             import google.generativeai as genai
             genai.configure(api_key=self.settings.gemini_api_key)

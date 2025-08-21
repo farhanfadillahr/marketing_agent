@@ -12,13 +12,13 @@ class AgentService:
         """Initialize AgentService."""
         self.agents = {}
     
-    def get_agent(self, agent_type: str, model_type: str = "openai"):
+    def get_agent(self, agent_type: str, model_type: str = "telkom-ai"):
         """
         Get agent berdasarkan tipe.
         
         Args:
             agent_type: 'general' atau 'marketing'
-            model_type: 'openai' atau 'gemini'
+            model_type: 'telkom-ai' atau 'gemini'
             
         Returns:
             Agent instance
@@ -38,7 +38,7 @@ class AgentService:
     def chat(self, 
              query: str, 
              agent_type: str = "general", 
-             model_type: str = "openai", 
+             model_type: str = "telkom-ai", 
              context: Optional[str] = None) -> str:
         """
         Chat dengan agent yang dipilih.
@@ -46,7 +46,7 @@ class AgentService:
         Args:
             query: Pertanyaan user
             agent_type: 'general' atau 'marketing'
-            model_type: 'openai' atau 'gemini'
+            model_type: 'telkom-ai' atau 'gemini'
             context: Konteks tambahan
             
         Returns:
@@ -61,7 +61,7 @@ class AgentService:
     def add_marketing_knowledge(self, 
                                documents: list, 
                                metadata_list: list = None, 
-                               model_type: str = "openai") -> bool:
+                               model_type: str = "telkom-ai") -> bool:
         """
         Menambahkan dokumen ke marketing agent knowledge base.
         
@@ -122,9 +122,9 @@ class AgentService:
             Dict informasi model
         """
         return {
-            "openai": {
-                "name": "OpenAI GPT-4O Mini",
-                "description": "Model OpenAI yang powerful dan cepat",
+            "telkom-ai": {
+                "name": "Telkom AI (v0.0.4)",
+                "description": "Model Telkom AI",
                 "best_for": "Analisis mendalam, reasoning kompleks"
             },
             "gemini": {
